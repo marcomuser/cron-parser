@@ -8,12 +8,16 @@ const readLinesFromStdin = async (stream) => {
 const readTimeFromArgv = (argv) => argv.at(2).split(":");
 
 const logLine = (hours, minutes, day, task) =>
-  console.log(`${hours}:${minutes} ${day} - ${task}`);
+  console.log(
+    `${removeLeadingZeroFromHours(hours)}:${minutes} ${day} - ${task}`
+  );
 
 const isLineTimeGreaterEqualArgTime = (lineTime, argTime) =>
   lineTime.getTime() >= argTime.getTime();
 
 // Edge cases
+const removeLeadingZeroFromHours = (hours) =>
+  hours.at(0) === "0" && hours.at(1) !== ":" ? hours.slice(1) : hours;
 const willBeTomorrow = (hours) => Number(hours) + 1 === 24;
 const getArgMinutesWithResetCheck = (hours, argHours, argMinutes) =>
   hours === argHours ? argMinutes : "00";
