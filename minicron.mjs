@@ -13,6 +13,11 @@ const logLine = (hours, minutes, day, task) =>
 const isLineTimeGreaterEqual = (lineTime, argTime) =>
   lineTime.getTime() >= argTime.getTime();
 
+// Edge cases
+const addOneHour = (hours) => (Number(hours) === 23 ? 0 : Number(hours) + 1);
+const getArgMinutesWithResetCheck = (hours, argHours, argMinutes) =>
+  hours === argHours ? argMinutes : "00";
+
 // Constants
 const today = "today";
 const tomorrow = "tomorrow";
@@ -44,7 +49,7 @@ const main = async () => {
       ) {
         logLine(argHours, minutes, today, task);
       } else {
-        logLine(Number(argHours) + 1, minutes, tomorrow, task);
+        logLine(addOneHour(argHours), minutes, tomorrow, task);
       }
     } else if (hours !== "*" && minutes === "*") {
       if (
@@ -53,9 +58,14 @@ const main = async () => {
           new Date(2022, 1, 1, argHours, 1)
         )
       ) {
-        logLine(hours, argMinutes, today, task);
+        logLine(
+          hours,
+          getArgMinutesWithResetCheck(hours, argHours, argMinutes),
+          today,
+          task
+        );
       } else {
-        logLine(Number(argHours) + 1, argMinutes, today, task);
+        logLine(hours, "00", tomorrow, task);
       }
     } else {
       logLine(argHours, argMinutes, today, task);
