@@ -49,7 +49,7 @@ const main = async () => {
         logLine(argHours, minutes, today, task);
       } else {
         logLine(
-          willBeTomorrow(argHours) ? "00" : Number(argHours) + 1,
+          willBeTomorrow(argHours) ? "0" : Number(argHours) + 1,
           minutes,
           willBeTomorrow(argHours) ? tomorrow : today,
           task
