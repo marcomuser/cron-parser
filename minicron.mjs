@@ -14,7 +14,7 @@ const isLineTimeGreaterEqualArgTime = (lineTime, argTime) =>
   lineTime.getTime() >= argTime.getTime();
 
 // Edge cases
-const addOneHour = (hours) => (Number(hours) === 23 ? 0 : Number(hours) + 1);
+const willBeTomorrow = (hours) => Number(hours) + 1 === 24;
 const getArgMinutesWithResetCheck = (hours, argHours, argMinutes) =>
   hours === argHours ? argMinutes : "00";
 
@@ -49,7 +49,12 @@ const main = async () => {
       ) {
         logLine(argHours, minutes, today, task);
       } else {
-        logLine(addOneHour(argHours), minutes, tomorrow, task);
+        logLine(
+          willBeTomorrow(argHours) ? "00" : Number(argHours) + 1,
+          minutes,
+          willBeTomorrow(argHours) ? tomorrow : today,
+          task
+        );
       }
     } else if (hours !== "*" && minutes === "*") {
       if (
