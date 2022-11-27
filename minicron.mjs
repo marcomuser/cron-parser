@@ -29,6 +29,8 @@ const main = async () => {
   for (const line of lines) {
     const [minutes, hours, task] = line.split(" ");
 
+    /* Now that I've already written this logic, I leave it as is 
+    but it would probably be much more elegant to work with dates all the way down*/
     if (![minutes, hours].includes("*")) {
       if (
         isLineTimeGreaterEqualArgTime(
