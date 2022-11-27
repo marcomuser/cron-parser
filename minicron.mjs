@@ -26,12 +26,8 @@ const main = async () => {
   const lines = await readLinesFromStdin(process.stdin);
   const [argHours, argMinutes] = readTimeFromArgv(process.argv);
 
-  for (const line of lines) {
-    const [minutes, hours, task] = line.split(" ");
-
-    /* Now that I've already written this logic, I leave it as is 
-    but it would probably be much more elegant to work with dates all the way down*/
-    if (![minutes, hours].includes("*")) {
+  const casesLookup = {
+    noStars: (hours, minutes, task) => {
       if (
         isLineTimeGreaterEqualArgTime(
           new Date(2022, 1, 1, hours, minutes),
@@ -42,7 +38,8 @@ const main = async () => {
       } else {
         logLine(hours, minutes, tomorrow, task);
       }
-    } else if (hours === "*" && minutes !== "*") {
+    },
+    hoursStar: (minutes, task) => {
       if (
         isLineTimeGreaterEqualArgTime(
           new Date(2022, 1, 1, 1, minutes),
@@ -58,7 +55,8 @@ const main = async () => {
           task
         );
       }
-    } else if (hours !== "*" && minutes === "*") {
+    },
+    minutesStar: (hours, task) => {
       if (
         isLineTimeGreaterEqualArgTime(
           new Date(2022, 1, 1, hours, 1),
@@ -74,8 +72,23 @@ const main = async () => {
       } else {
         logLine(hours, "00", tomorrow, task);
       }
-    } else {
+    },
+    allStars: (task) => {
       logLine(argHours, argMinutes, today, task);
+    },
+  };
+
+  for (const line of lines) {
+    const [minutes, hours, task] = line.split(" ");
+
+    if (hours !== "*" && minutes !== "*") {
+      casesLookup.noStars(hours, minutes, task);
+    } else if (hours === "*" && minutes !== "*") {
+      casesLookup.hoursStar(minutes, task);
+    } else if (hours !== "*" && minutes === "*") {
+      casesLookup.minutesStar(hours, task);
+    } else {
+      casesLookup.allStars(task);
     }
   }
 };
