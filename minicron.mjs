@@ -10,7 +10,7 @@ const readTimeFromArgv = (argv) => argv.at(2).split(":");
 const logLine = (hours, minutes, day, task) =>
   console.log(`${hours}:${minutes} ${day} - ${task}`);
 
-const isLineTimeGreaterEqual = (lineTime, argTime) =>
+const isLineTimeGreaterEqualArgTime = (lineTime, argTime) =>
   lineTime.getTime() >= argTime.getTime();
 
 // Edge cases
@@ -31,7 +31,7 @@ const main = async () => {
 
     if (![minutes, hours].includes("*")) {
       if (
-        isLineTimeGreaterEqual(
+        isLineTimeGreaterEqualArgTime(
           new Date(2022, 1, 1, hours, minutes),
           new Date(2022, 1, 1, argHours, argMinutes)
         )
@@ -42,7 +42,7 @@ const main = async () => {
       }
     } else if (hours === "*" && minutes !== "*") {
       if (
-        isLineTimeGreaterEqual(
+        isLineTimeGreaterEqualArgTime(
           new Date(2022, 1, 1, 1, minutes),
           new Date(2022, 1, 1, 1, argMinutes)
         )
@@ -53,7 +53,7 @@ const main = async () => {
       }
     } else if (hours !== "*" && minutes === "*") {
       if (
-        isLineTimeGreaterEqual(
+        isLineTimeGreaterEqualArgTime(
           new Date(2022, 1, 1, hours, 1),
           new Date(2022, 1, 1, argHours, 1)
         )
