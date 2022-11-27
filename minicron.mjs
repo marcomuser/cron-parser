@@ -17,7 +17,7 @@ const isLineTimeGreaterEqualArgTime = (lineTime, argTime) =>
 
 // Edge cases
 const removeLeadingZeroFromHours = (hours) =>
-  hours.at(0) === "0" && hours.length === 2 ? hours.slice(1) : hours;
+  hours[0] === "0" && hours.length === 2 ? hours.slice(1) : hours;
 const willBeTomorrow = (hours) => Number(hours) + 1 === 24;
 const getArgMinutesWithResetCheck = (hours, argHours, argMinutes) =>
   hours === argHours ? argMinutes : "00";
