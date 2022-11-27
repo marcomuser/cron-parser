@@ -1,23 +1,24 @@
-const [argHour, argMinute] = process.argv.at(2).split(":");
-
-async function read(stream) {
+const readLinesFromStdin = async (stream) => {
   const chunks = [];
   for await (const chunk of stream) chunks.push(chunk);
-  return Buffer.concat(chunks).toString("utf8");
-}
+  return Buffer.concat(chunks).toString("utf8").split("\n");
+};
+const readTimeFromArgv = (argv) => argv.at(2).split(":");
 
-const input = await read(process.stdin);
+const lines = await readLinesFromStdin(process.stdin);
+const [argHours, argMinutes] = readTimeFromArgv(process.argv);
 
-const lines = input.split("\n");
-
-const arr = [];
 for (const line of lines) {
-  const [minute, hour, task] = line.split(" ");
-  if (hour === "*" && minute === "*") {
-    arr.push(`${argHour}:${argMinute} today - ${task}`);
-  } else if (hour === "*" && argMinute > minute) {
-    arr.push(`${Number(argHour) + 1}:${minute} today - ${task}`);
+  const [minutes, hours, task] = line.split(" ");
+  const lineTime = new Date(2022, 1, 1, hours, minutes);
+  const argTime = new Date(2022, 1, 1, argHours, argMinutes);
+
+  if (![minutes, hours].includes("*")) {
+    if (lineTime.getTime() >= argTime.getTime()) {
+      console.log(`${hours}:${minutes} today - ${task}`);
+    } else {
+      console.log(`${hours}:${minutes} tomorrow - ${task}`);
+    }
+  } else if (hours === "*") {
   }
 }
-
-console.log(arr);
